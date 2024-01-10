@@ -52,7 +52,15 @@ const Details = () => {
             setData(response.data)
             // Handle the response data as needed
         } catch (error) {
-            alert("Error: " + error)
+            // By default if server doesn't respond
+            // alert("Error: " + error)
+            setData(
+                {
+                    disease: "Septoria leaf spot",
+                    plant: "Tomato",
+                    remedy: "To remedy Septoria leaf spot in tomato plants, a combination of cultural practices and, if necessary, chemical controls can be employed. Start by practicing good sanitation by removing and disposing of infected leaves. This helps prevent further spread. Ensure proper spacing between plants for adequate air circulation, and water at the base to minimize splashing. \n\nThis is default remedy (Server isn't responding)"
+                }
+            )
             // Handle errors here
         } finally {
             setLoading(false);
@@ -101,7 +109,7 @@ const Details = () => {
                     },
                     headerShadowVisible: false,
                     headerLeft: () => (
-                        <ScreenHeaderBtn iconUrl={icons.agrodocLogo} dimension="100%" />
+                        <ScreenHeaderBtn iconUrl={icons.agrodocLogo} dimension="100%" wid={140} />
                     ),
                     headerTitle: "",
                 }}

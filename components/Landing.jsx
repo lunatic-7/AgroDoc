@@ -4,13 +4,32 @@ import { useState, useEffect } from 'react';
 import { FONT, SIZES, COLORS, icons } from '../constants';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
+import HoveringButton from './models/HoveringButton';
+
 
 const Landing = ({ farmer_img }) => {
   const router = useRouter();
+  const isFocused = useIsFocused();
 
   const [image, setImage] = useState(null);
   const [imgBase64, imgSetBase64] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false)
+
+  const checkLoggedIn = async () => {
+    const userData = await AsyncStorage.getItem('userData');
+    if (userData !== null) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+  }
+
+  useEffect(() => {
+    checkLoggedIn();
+  }, [isFocused])
 
 
   // PICKING AN IMAGE AND GETTING IT IN BASE64 FORMAT
@@ -67,12 +86,12 @@ const Landing = ({ farmer_img }) => {
             ) : (
               <Text style={{ paddingHorizontal: 48.7 }}></Text>
             )}
-            <TouchableOpacity onPress={() => setImage(null)} style={{backgroundColor: "#F5F5F5", borderRadius: SIZES.medium}}>
+            <TouchableOpacity onPress={() => setImage(null)} style={{ backgroundColor: "#F5F5F5" }}>
               {/* <Text style={{ color: "red", fontFamily: FONT.medium, fontSize: SIZES.medium, textShadowOffset: { height: 1, width: 1 }, textShadowRadius: 5, textDecorationLine: "underline" }}>Remove</Text> */}
               <Image
                 source={icons.dustbin}
                 resizeMode='contain'
-                style={{ width: 50, height: 45}}
+                style={{ width: 40, height: 35 }}
               />
             </TouchableOpacity>
           </View>
@@ -93,6 +112,23 @@ const Landing = ({ farmer_img }) => {
       ) : (
         <View></View>
       )}
+
+      {loggedIn &&
+        <View>
+          <HoveringButton pathname="QuestionList" text="Q/A" btm={-2} rit={16} bgClr={COLORS.tertiary} ftSize={16}/>
+
+          <View style={styles.containerX}>
+            <TouchableOpacity style={styles.buttonX} onPress={() => router.push({ pathname: "ChatBot" })}>
+                <Image
+                  source={icons.chatBot}
+                  resizeMode='contain'
+                  style={{ width: 50, height: 50 }}
+                />
+            </TouchableOpacity>
+        </View>
+        </View>
+      }
+
     </View>
   )
 }
@@ -159,6 +195,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: "center",
     alignItems: "center",
+    width: 200,
     marginLeft: SIZES.large * 1.5,
     marginRight: SIZES.large * 1.5,
     borderRadius: SIZES.small * 1.5,
@@ -171,7 +208,6 @@ const styles = StyleSheet.create({
   imgBox: {
     flex: 1,
     backgroundColor: "#F5F5F5",
-    borderRadius: SIZES.medium,
     elevation: 2,
     alignItems: "center",
     justifyContent: "center",
@@ -179,6 +215,27 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     padding: 5,
     width: 230,
+  },
+
+  // Hovering button
+  containerX: {
+    position: 'absolute',
+    bottom: -2,
+    right: 75,
+    opacity: 0.8,
+  },
+  buttonX: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: COLORS.tertiary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textX: {
+    fontSize: 16,
+    color: COLORS.white,
+    fontWeight: 'bold',
   }
 });
 

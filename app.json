@@ -2,7 +2,7 @@
   "expo": {
     "name": "AgroDoc",
     "slug": "AgroDoc",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -16,7 +16,8 @@
       "favicon": "./assets/favicon.png"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.lunatic07.AgroDoc"
     },
     "android": {
       "adaptiveIcon": {
